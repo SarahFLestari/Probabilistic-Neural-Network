@@ -11,6 +11,11 @@ class0 = []
 class1 = []
 class2 = []
 allClass = []
+probabilityAllDataClass0 = []
+arrayValidasi = []
+probabilityPerdata = []
+kumpulanAkurasi = []
+kumpulanG =[]
 
 
 file = open('data_train_PNN.txt')
@@ -93,15 +98,6 @@ sumMinClass2 = sum(daftarMinClass2)
 avgDistClass2 = (1/56) * sumMinClass2
 print("average distance 2 ",avgDistClass2)
 
-g = 0.825
-
-touClass0 = g * avgDistClass0
-touClass1 = g * avgDistClass1
-touClass2 = g * avgDistClass2
-print("tou0 ",touClass0)
-print("tou1 ",touClass1)
-print("tou2 ",touClass2)
-
 allClassTest = []
 
 with open('data_test_PNN.txt') as f:
@@ -112,27 +108,61 @@ with open('data_test_PNN.txt') as f:
 
 for i in range(len(z)):
     allClassTest.append([x[i], y[i], z[i]])
+g =0
 
+for k in range(0,100):
+    g = g + 0.01
+    touClass0 = g * avgDistClass0
+    touClass1 = g * avgDistClass1
+    touClass2 = g * avgDistClass2
 
-probabilityAllDataClass0 = []
-sigmaExponenClass0 = []
-probabilityPerdata = []
+    for i in range(100,150):
+        sigmaExponenClass0 = []
+        sigmaExponenClass1 = []
+        sigmaExponenClass2 = []
+        for t in range(len(class0)):
+            ForSigmaExponen = math.exp(-1 * (((allClass[i][0]-class0[t][0])**2) + ((allClass[i][1]-class0[t][1])**2) + ((allClass[i][2]-class0[t][2])**2)/2*(touClass0**2)))
+            sigmaExponenClass0.append(ForSigmaExponen)
+            sumExpo = sum(sigmaExponenClass0)
 
-#untuk Tou = tou0
-for i in range(100,150):
-    for t in range(len(class0)):
-        ForSigmaExponen = math.exp(-1 * (((allClass[i][0]-class0[t][0])**2) + ((allClass[i][1]-class0[t][1])**2) + ((allClass[i][2]-class0[t][2])**2)/2*(touClass0**2)))
-        sigmaExponenClass0.append(ForSigmaExponen)
-        sumExpo = sum(sigmaExponenClass0)
-        print("data ke i",i," ", t)
-        print("sum expo",sumExpo)
-    Probability = (1 / ((2*math.pi)**3/2)*(touClass0**3)*(46)) * sumExpo
-    print("probabilitas 1 i",Probability)
-    probabilityPerdata.append(Probability)
-    print("probabilitas perdata",probabilityPerdata)
-
-    # probabilityAllDataClass0.append(sort)
-print("data probabilitas semua data kelas 0",probabilityAllDataClass0)
+        Probability0 = sumExpo / (((2 * math.pi) ** 3 / 2) * (touClass0 ** 3) * (len(class0)))
+        # print ("Prob kelas 0 =",Probability0)
+        for t in range(len(class1)):
+            ForSigmaExponen = math.exp(-1 * (
+                        ((allClass[i][0] - class1[t][0]) ** 2) + ((allClass[i][1] - class1[t][1]) ** 2) + (
+                            (allClass[i][2] - class1[t][2]) ** 2) / 2 * (touClass1 ** 2)))
+            sigmaExponenClass1.append(ForSigmaExponen)
+            sumExpo = sum(sigmaExponenClass1)
+            # print("data ke i",i," ", t)
+            # print("sum expo",sumExpo)
+        Probability1 = sumExpo / (((2 * math.pi) ** 3 / 2) * (touClass1 ** 3) * (len(class1)))
+        # print("Prob kelas 1 =", Probability1)
+        for t in range(len(class1)):
+            ForSigmaExponen = math.exp(-1 * (
+                        ((allClass[i][0] - class2[t][0]) ** 2) + ((allClass[i][1] - class2[t][1]) ** 2) + (
+                            (allClass[i][2] - class2[t][2]) ** 2) / 2 * (touClass2 ** 2)))
+            sigmaExponenClass2.append(ForSigmaExponen)
+            sumExpo = sum(sigmaExponenClass2)
+             # print("data ke i",i," ", t)
+             # print("sum expo",sumExpo)
+        Probability2 = sumExpo / (((2 * math.pi) ** 3 / 2) * (touClass2 ** 3) * (len(class2)))
+         # print (Probability0,Probability1,Probability2)
+        arrayValidasi.append([Probability0,Probability1,Probability2].index(max([Probability0,Probability1,Probability2])))
+    print(arrayValidasi)
+    jumlahAkurasi = 0
+    for b in range(len(arrayValidasi)):
+        print("INI",allClass[100+b])
+        if (arrayValidasi[b] == allClass[100+b][3]):
+            jumlahAkurasi = jumlahAkurasi + 1
+    persen = jumlahAkurasi * 1/100 * 100
+    print(persen,"%")
+    kumpulanAkurasi.append(persen)
+    kumpulanG.append(g)
+    # print("Prob kelas 2 =", Probability2)
+    # print (Probability)
+    # print("probabilitas 1 i",Probability)
+    # probabilityPerdata.append(Probability)
+    # print("probabilitas perdata",probabilityPerdata)
 
 # ax.set_xlabel("atribut 1")
 # ax.set_ylabel("atribut 2")
