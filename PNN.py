@@ -108,12 +108,14 @@ with open('data_test_PNN.txt') as f:
 
 for i in range(len(z)):
     allClassTest.append([x[i], y[i], z[i]])
-g= 0
-for k in range(0,100):
-    g = g + 0.1
+g =0
+
+for k in range(0,300):
+    g = g + 0.0989
     touClass0 = g * avgDistClass0
     touClass1 = g * avgDistClass1
     touClass2 = g * avgDistClass2
+
     for i in range(100,150):
         sigmaExponenClass0 = []
         sigmaExponenClass1 = []
@@ -134,7 +136,7 @@ for k in range(0,100):
             # print("sum expo",sumExpo)
         Probability1 = sumExpo / (((2 * math.pi) ** 3 / 2) * (touClass1 ** 3) * (len(class1)))
         # print("Prob kelas 1 =", Probability1)
-        for t in range(len(class1)):
+        for t in range(len(class2)):
             ForSigmaExponen = math.exp(-1 * (
                         ((allClass[i][0] - class2[t][0]) ** 2) + ((allClass[i][1] - class2[t][1]) ** 2) + (
                             (allClass[i][2] - class2[t][2]) ** 2) / 2 * (touClass2 ** 2)))
@@ -149,11 +151,13 @@ for k in range(0,100):
     jumlahAkurasi = 0
     for b in range(len(arrayValidasi)):
         # print("INI",allClass[100+b])
-        if (arrayValidasi[b] == allClass[100+b][3]):
+        if (int(arrayValidasi[b]) == int(allClass[100+b][3])):
             jumlahAkurasi = jumlahAkurasi + 1
-    persen = jumlahAkurasi * 1/100 * 100
+
+        # print("akurasiii", jumlahAkurasi)
+    persen = jumlahAkurasi/len(arrayValidasi)
     print(persen,"%")
-    print(g)
+    print("g",g)
     kumpulanAkurasi.append(persen)
     kumpulanG.append(g)
     # print("Prob kelas 2 =", Probability2)
@@ -161,9 +165,10 @@ for k in range(0,100):
     # print("probabilitas 1 i",Probability)
     # probabilityPerdata.append(Probability)
     # print("probabilitas perdata",probabilityPerdata)
-    print(arrayValidasi)
-    print("tou",touClass0,touClass1,touClass2)
+    # print(arrayValidasi)
+    # print("tou",touClass0,touClass1,touClass2)
     arrayValidasi = []
+    jumlahAkurasi = 0
 
 # ax.set_xlabel("atribut 1")
 # ax.set_ylabel("atribut 2")
