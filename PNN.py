@@ -115,13 +115,36 @@ for i in range(len(z)):
 
 sigmaExponen = []
 sumExpo = []
+SigExpoForProbability = float
+probabilityPerdata = []
 #untuk Tou = tou0
-for i in range(len(allClassTest)):
+for i in range(100,150):
     for t in range(len(class0)):
-        ForSigmaExponen = math.exp(-1 * (((allClassTest[i][0]-class0[t][0])**2) + ((allClassTest[i][1]-class0[t][1])**2) + ((allClassTest[i][2]-class0[t][2])**2)/2*(touClass0**2)))
-        print(ForSigmaExponen)
+        ForSigmaExponen = math.exp(-1 * (((allClass[i][0]-class0[t][0])**2) + ((allClass[i][1]-class0[t][1])**2) + ((allClass[i][2]-class0[t][2])**2)/2*(touClass0**2)))
+        sigmaExponen.append(ForSigmaExponen)
+        print("ini satu",ForSigmaExponen)
+    sumExpo = sum(sigmaExponen)
+    probability = 1 / ((2*math.pi)**3/2)*touClass0**3
+print(sumExpo)
+
+
+for i in range(100,150):
+    for t in range(len(class0)):
+        ForSigmaExponen = math.exp(-1 * (nmp.linalg.norm([allClass[i][0] allClass[i][1],allClass[i][2]] - [class0[t][0],class0[t][1],class0[t][2]])) / 2*(touClass0**2))
+        sigmaExponen.append(ForSigmaExponen)
+        print("ini 2",ForSigmaExponen)
+    sumExpo = sum(sigmaExponen)
+print(sumExpo)
+
+for i in range(100,150):
+    for t in range(len(class0)):
+        ForSigmaExponen = math.exp(-1 * (((allClass[i][0]-class1[t][0])**2) + ((allClass[i][1]-class1[t][1])**2) + ((allClass[i][2]-class1[t][2])**2)/2*(touClass1**2)))
         sigmaExponen.append(ForSigmaExponen)
 
+for i in range(100,150):
+    for t in range(len(class2)):
+        ForSigmaExponen = math.exp(-1 * (((allClass[i][0]-class2[t][0])**2) + ((allClass[i][1]-class2[t][1])**2) + ((allClass[i][2]-class2[t][2])**2)/2*(touClass2**2)))
+        sigmaExponen.append(ForSigmaExponen)
 # ax.set_xlabel("atribut 1")
 # ax.set_ylabel("atribut 2")
 # ax.set_zlabel("atribut 3")
