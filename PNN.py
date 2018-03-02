@@ -108,14 +108,12 @@ with open('data_test_PNN.txt') as f:
 
 for i in range(len(z)):
     allClassTest.append([x[i], y[i], z[i]])
-g =0
-
+g= 0
 for k in range(0,100):
-    g = g + 0.01
+    g = g + 0.1
     touClass0 = g * avgDistClass0
     touClass1 = g * avgDistClass1
     touClass2 = g * avgDistClass2
-
     for i in range(100,150):
         sigmaExponenClass0 = []
         sigmaExponenClass1 = []
@@ -124,7 +122,6 @@ for k in range(0,100):
             ForSigmaExponen = math.exp(-1 * (((allClass[i][0]-class0[t][0])**2) + ((allClass[i][1]-class0[t][1])**2) + ((allClass[i][2]-class0[t][2])**2)/2*(touClass0**2)))
             sigmaExponenClass0.append(ForSigmaExponen)
             sumExpo = sum(sigmaExponenClass0)
-
         Probability0 = sumExpo / (((2 * math.pi) ** 3 / 2) * (touClass0 ** 3) * (len(class0)))
         # print ("Prob kelas 0 =",Probability0)
         for t in range(len(class1)):
@@ -148,14 +145,15 @@ for k in range(0,100):
         Probability2 = sumExpo / (((2 * math.pi) ** 3 / 2) * (touClass2 ** 3) * (len(class2)))
          # print (Probability0,Probability1,Probability2)
         arrayValidasi.append([Probability0,Probability1,Probability2].index(max([Probability0,Probability1,Probability2])))
-    print(arrayValidasi)
+    # print(arrayValidasi)
     jumlahAkurasi = 0
     for b in range(len(arrayValidasi)):
-        print("INI",allClass[100+b])
+        # print("INI",allClass[100+b])
         if (arrayValidasi[b] == allClass[100+b][3]):
             jumlahAkurasi = jumlahAkurasi + 1
     persen = jumlahAkurasi * 1/100 * 100
     print(persen,"%")
+    print(g)
     kumpulanAkurasi.append(persen)
     kumpulanG.append(g)
     # print("Prob kelas 2 =", Probability2)
@@ -163,6 +161,9 @@ for k in range(0,100):
     # print("probabilitas 1 i",Probability)
     # probabilityPerdata.append(Probability)
     # print("probabilitas perdata",probabilityPerdata)
+    print(arrayValidasi)
+    print("tou",touClass0,touClass1,touClass2)
+    arrayValidasi = []
 
 # ax.set_xlabel("atribut 1")
 # ax.set_ylabel("atribut 2")
