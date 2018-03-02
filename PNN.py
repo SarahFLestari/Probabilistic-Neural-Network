@@ -1,7 +1,8 @@
 import matplotlib.pyplot as pyplot
 from mpl_toolkits.mplot3d import Axes3D
+import numpy as nmp
 import math
-
+from collections import Counter
 x = []
 y = []
 z = []
@@ -9,6 +10,8 @@ q = []
 class0 = []
 class1 = []
 class2 = []
+allClass = []
+
 
 file = open('data_train_PNN.txt')
 
@@ -18,6 +21,10 @@ with open('data_train_PNN.txt') as f:
     y = [float(line.split()[1]) for line in lines]
     z = [float(line.split()[2]) for line in lines]
     q = [int(line.split()[3]) for line in lines]
+
+for i in range(len(q)) :
+    allClass.append([x[i],y[i],z[i],q[i]])
+
 
 for i in range(len(q)) :
     # print(i)
@@ -86,7 +93,7 @@ sumMinClass2 = sum(daftarMinClass2)
 avgDistClass2 = (1/56) * sumMinClass2
 print("average distance 2 ",avgDistClass2)
 
-g = 0.11
+g = 0.825
 
 touClass0 = g * avgDistClass0
 touClass1 = g * avgDistClass1
@@ -95,19 +102,35 @@ print("tou0 ",touClass0)
 print("tou1 ",touClass1)
 print("tou2 ",touClass2)
 
-ax.set_xlabel("atribut 1")
-ax.set_ylabel("atribut 2")
-ax.set_zlabel("atribut 3")
+allClassTest = []
 
-for i in range(len(class0)):
-    ax.scatter(class0[i][0], class0[i][1], class0[i][2], color='r')
-for i in range(len(class1)):
-    ax.scatter(class1[i][0], class1[i][1], class1[i][2], color='g')
-for i in range(len(class2)):
-    ax.scatter(class2[i][0], class2[i][1], class2[i][2], color='b')
-pyplot.title('Visualisasi data training')
-pyplot.show()
+with open('data_test_PNN.txt') as f:
+    lines = f.readlines()
+    x = [float(line.split()[0]) for line in lines]
+    y = [float(line.split()[1]) for line in lines]
+    z = [float(line.split()[2]) for line in lines]
 
+for i in range(len(z)):
+    allClassTest.append([x[i], y[i], z[i]])
 
+sigmaExponen = []
+sumExpo = []
+#untuk Tou = tou0
+for i in range(len(allClassTest)):
+    for t in range(len(class0)):
+        ForSigmaExponen = math.exp(-1 * (((allClassTest[i][0]-class0[t][0])**2) + ((allClassTest[i][1]-class0[t][1])**2) + ((allClassTest[i][2]-class0[t][2])**2)/2*(touClass0**2)))
+        print(ForSigmaExponen)
+        sigmaExponen.append(ForSigmaExponen)
 
-# def rataDistance():
+# ax.set_xlabel("atribut 1")
+# ax.set_ylabel("atribut 2")
+# ax.set_zlabel("atribut 3")
+#
+# for i in range(len(class0)):
+#     ax.scatter(class0[i][0], class0[i][1], class0[i][2], color='r')
+# for i in range(len(class1)):
+#     ax.scatter(class1[i][0], class1[i][1], class1[i][2], color='g')
+# for i in range(len(class2)):
+#     ax.scatter(class2[i][0], class2[i][1], class2[i][2], color='b')
+# pyplot.title('Visualisasi data training')
+# pyplot.show()
